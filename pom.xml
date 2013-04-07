@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>extract</artifactId>
+    <name>extract - ${project.version}</name>
+    <groupId>uk.co.oracletroubadour</groupId>
+    <packaging>jar</packaging>
+    <description>Ad-hoc Oracle Database Extracter</description>
+    <version>0.0.1</version>
+    <url>http://sturton.github.com</url>
+    <inceptionYear>2013</inceptionYear>
+    <licenses>
+        <license>
+            <distribution>repo</distribution>
+            <name>New BSD Licence</name>
+            <url>http:// www.opensource.org/licenses/bsd-license.php</url>
+        </license>
+    </licenses>
+
+    <!--
+    <issueManagement>
+        <system>Sourceforge</system>
+        <url>https://github.com/tracker/?group_id=38875</url>
+    </issueManagement>
+    -->
+
+    
+    <parent>
+      <groupId>org.sonatype.oss</groupId>
+      <artifactId>oss-parent</artifactId>
+      <version>7</version>
+    </parent>
+
+
+    <!--
+    <mailingLists>
+      <mailingList>
+	<name>extract Development Mailing list</name>
+	<subscribe>http://lists.sourceforge.net/mailman/listinfo/extract-chat</subscribe>
+	<unsubscribe>http://lists.sourceforge.net/mailman/listinfo/extract-chat</unsubscribe>
+	<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=extract-chat</archive>
+	<post>extract-chat@lists.sourceforge.net</post>
+      </mailingList>
+    </mailingLists>
+    -->
+
+    <scm>
+        <connection>scm:git:git@github.com:sturton/extracter.git</connection>
+        <developerConnection>scm:git:git@github.com:sturton/extracter.git</developerConnection>
+        <url>https://github.com/sturton/extracter</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Stuart Turton</name>
+            <id>sturton</id>
+            <email>sturton at github.com</email>
+            <roles>
+                <role>Software Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <dependencies>
+	<!-- These runtime dependencies are needed to run correctly in ANT -->
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.3.04</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.9.0</version>
+            <scope>runtime</scope>
+        </dependency>
+	<!-- These are needed to run correctly -->
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>serializer</artifactId>
+            <version>2.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+	<dependency>
+	    <groupId>gnu.getopt</groupId>
+	    <artifactId>java-getopt</artifactId>
+	    <version>1.0.13</version>
+	</dependency>
+	<dependency>
+	 <groupId>com.oracle</groupId>
+	 <artifactId>ojdbc14</artifactId>
+	 <version>10.2.0.3</version>
+	</dependency>
+    </dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>site.extract.sf.net</id>
+            <name>extract Site</name>
+            <url>scp://shell.sourceforge.net/home/project-web/extract/htdocs/maven-site/</url>
+        </site>
+    </distributionManagement>
+
+    <properties>
+      <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
+      <project.report.outputEncoding>UTF8</project.report.outputEncoding>
+      <exec.mainClass>uk.co.oracletroubadour.utility.Extracter</exec.mainClass>
+      <!-- 
+	   apt uses velocity to replace variables, which does not support variable names containing periods/full stops 
+       -->
+      <velocityProjectVersion>${project.version}</velocityProjectVersion>
+      <velocityBuildFinalName>${project.build.finalName}</velocityBuildFinalName>
+      <velocityDownloadRoot>https://oss.sonatype.org/content/repositories/releases/uk/co/oracletroubadour/extracter</velocityDownloadRoot>
+
+      <!--
+	   Correct Change Log Report File Activity Report Links for subproject
+      -->
+      <maven.changelog.svn.baseurl>https://github.com/sturton/extract</maven.changelog.svn.baseurl>
+    </properties>
+
+
+    <build>
+      <!-- Filter Java source in order to generate Version.java -->
+      <sourceDirectory>${basedir}/target/generated-sources/java</sourceDirectory>
+      <testOutputDirectory>${basedir}/test</testOutputDirectory>
+   
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>1.0-beta-6</version>
+      </extension>
+    </extensions>  
+	
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+	        <version>3.0</version>
+		<configuration>
+		<reportPlugins>
+		    <plugin>
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-changes-plugin</artifactId>
+		      <!-- <inherited>false</inherited> -->
+		      <!-- version>2.6</version -->
+		      <reportSets>
+			<reportSet>
+			  <reports>
+			    <report>changes-report</report>
+			  </reports>
+			</reportSet>
+		      </reportSets>
+		      <configuration>
+			<issueManagementSystems>
+			    <issueManagementSystem>changes.xml</issueManagementSystem>
+			    <issueManagementSystem>Sourceforge</issueManagementSystem>
+			</issueManagementSystems>
+		      </configuration>
+		    </plugin>
+		    <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-project-info-reports-plugin</artifactId>
+			<!--version>2.4</version -->
+		    </plugin>
+		    <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-changelog-plugin</artifactId>
+			<!-- version>2.2</version --> 
+		    </plugin>
+		    <!--
+		    <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-javadoc-plugin</artifactId>
+			<-version>2.8</version>
+			<configuration>
+			    <javadocVersion>1.5</javadocVersion>
+			    <aggregate>true</aggregate>
+			</configuration>
+		    </plugin>
+		    <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-checkstyle-plugin</artifactId>
+			<-version>2.7</version>
+		    </plugin>
+		    -->
+		</reportPlugins>
+		</configuration>
+            </plugin>
+
+        <!-- 
+	     Make executable JAR file 
+	--> 
+	<plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>make-assembly</id> <!-- this is used for inheritance merges -->
+            <phase>package</phase> <!-- bind to the packaging phase -->
+            <goals>
+              <goal>single</goal>
+            </goals>
+		<configuration>
+		  <descriptorRefs>
+		    <descriptorRef>jar-with-dependencies</descriptorRef>
+		  </descriptorRefs>
+		  <!--
+		    <finalName>extract</finalName>
+		    <appendAssemblyId>false</appendAssemblyId>
+		  -->
+		  <archive>
+		    <manifest>
+		      <mainClass>uk.co.oracletroubadour.utility.Extracter</mainClass>
+		    </manifest>
+		  </archive>
+		</configuration>
+          </execution>
+	  <!--
+          <execution>
+            <id>distribution</id> 
+            <phase>package</phase> < !- - bind to the packaging phase - - >
+            <goals>
+              <goal>single</goal>
+            </goals>
+	    <configuration>
+		  <descriptors>
+		    <descriptor>${basedir}/src/main/assembly/distribution.xml</descriptor>
+		  </descriptors>
+	    </configuration>
+          </execution>
+	  -->
+        </executions>
+      </plugin>
+	
+      
+     </plugins>
+
+   <resources>
+	   <resource>
+	      <filtering>true</filtering>
+	      <directory>${basedir}/src/main/resources</directory>
+	    </resource>
+	   <resource>
+	      <filtering>true</filtering>
+	      <directory>${basedir}/src/main/command/ant</directory>
+	      <targetPath>${basedir}</targetPath>
+	    </resource>
+	   <resource>
+	      <filtering>true</filtering>
+	      <directory>${basedir}/src/main/command</directory>
+	      <includes>
+		<include>extract.bat</include>
+		<include>extract.sh</include>
+		<include>extract_example.bat</include>
+		<include>extract_example.sh</include>
+		<include>extract_ant_example.bat</include>
+		<include>extract_ant_example.sh</include>
+	      </includes>
+	      <targetPath>${basedir}</targetPath>
+	    </resource>
+            <!-- Filter Java source in order to generate Version.java -->
+	   <resource>
+	      <filtering>true</filtering>
+	      <directory>${basedir}/src/main/java</directory>
+	      <targetPath>${basedir}/target/generated-sources/java</targetPath>
+	    </resource>
+    </resources>
+
+   <testResources>
+	   <testResource>
+	      <filtering>false</filtering>
+	      <directory>${basedir}/src/test/resources</directory>
+	    </testResource>
+	   <testResource>
+	      <filtering>false</filtering>
+	      <directory>${basedir}/src/test/resources/samples</directory>
+	      <targetPath>${basedir}/test/samples</targetPath>
+	    </testResource>
+	   <testResource>
+	      <filtering>true</filtering>
+	      <directory>${basedir}/src/test/command</directory>
+	      <includes>
+		<include>extract_test.bat</include>
+		<include>extract_test.sh</include>
+	      </includes>
+	      <targetPath>${basedir}/test</targetPath>
+	    </testResource>
+    </testResources>
+	    
+    </build>
+
+</project>
+
