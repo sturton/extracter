@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <properties>
-        <title>Extracter Project</title>
+        <title>Ad Hoc Query Extracter Project</title>
         <author email="sturton at github.com">Albert Tumanov</author>
     </properties>
 
-    </body>
+    <body>
         <release version="0.0.1"  date="2013-04-07" description="Initial Check-in" />
     </body>
 </document>
