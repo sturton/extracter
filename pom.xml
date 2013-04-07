@@ -100,6 +100,8 @@
 	 <groupId>com.oracle</groupId>
 	 <artifactId>ojdbc14</artifactId>
 	 <version>10.2.0.3</version>
+	 <!-- Oracle JDBC classes should not be included in the JAR-with-dependencies-->
+	 <scope>provided</scope>
 	</dependency>
     </dependencies>
 

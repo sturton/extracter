@@ -12,13 +12,6 @@ REM Set classpath
 REM NB: classpath must contain the pldoc directory to be able to locate .xsl files
 set cp=%pldir%\target\${project.build.finalName}-jar-with-dependencies.jar  
 
-:arg
-if "%1" == "" goto call
-if "%1" == "-url" goto oracle
-shift
-goto arg
-
-:oracle
 rem Include Oracle jars in the classpath 
 if "%ORACLE_HOME%" == "" ( echo ERROR: Environment variable ORACLE_HOME not set. 1>&2 && exit /b 1 )
 @REM normal oracle home 
@@ -27,7 +20,6 @@ set cp=%cp%;%ORACLE_HOME%\jdbc\lib\ojdbc6.jar;%ORACLE_HOME%\jdbc\lib\ojdbc5.jar;
 set cp=%cp%;%ORACLE_HOME%\ojdbc6.jar;%ORACLE_HOME%\ojdbc5.jar;%ORACLE_HOME%\ojdbc14.jar;%ORACLE_HOME%\classes12.jar
 
 
-:call
 REM Call PLDoc
 @REM java -Xbootclasspath/p:"%bcp%" -cp "%cp%" net.sourceforge.pldoc.PLDoc %*
 java -server -cp "%cp%" ${exec.mainClass} %*
