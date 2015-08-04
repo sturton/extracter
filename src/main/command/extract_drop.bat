@@ -14,6 +14,6 @@ REM Resolve the directory of pldoc
 set pldir=%~d0%~p0
 
 pushd %TEMP%
-call %pldir%pldoc.bat -d drop %1%
+call %pldir%extract.bat -d drop %1%
 drop\index.html
 PAUSE

@@ -27,7 +27,7 @@ pldir=`dirname "$PRG"`
 oldpwd=`pwd` ; cd "${pldir}"; pldir=`pwd`; cd "${oldpwd}"; unset oldpwd
 
 # Set classpath
-cp="${pldir}:${pldir}/target/${project.build.finalName}-jar-with-dependencies.jar"
+cp="${CLASSPATH}:${pldir}:${pldir}/target/${project.build.finalName}-jar-with-dependencies.jar"
 
 if [ -z "$ORACLE_HOME" ]
 then
@@ -35,9 +35,9 @@ then
   exit 1
 else
   #Normal ORACLE_HOME 
-  cp="${cp}:$ORACLE_HOME/jdbc/lib/ojdbc6.jar:$ORACLE_HOME/jdbc/lib/ojdbc5.jar:$ORACLE_HOME/jdbc/lib/ojdbc14.jar:$ORACLE_HOME/jdbc/lib/classes12.jar"
-  #InstantClienr ORACLE_HOME 
-  cp="${cp}:$ORACLE_HOME/ojdbc6.jar:$ORACLE_HOME/ojdbc5.jar:$ORACLE_HOME/ojdbc14.jar:$ORACLE_HOME/classes12.jar"
+  cp="${cp}:$ORACLE_HOME/jdbc/lib/ojdbc7.jar:$ORACLE_HOME/jdbc/lib/ojdbc6.jar:$ORACLE_HOME/jdbc/lib/ojdbc5.jar:$ORACLE_HOME/jdbc/lib/ojdbc14.jar:$ORACLE_HOME/jdbc/lib/classes12.jar"
+  #InstantClient ORACLE_HOME 
+  cp="${cp}:$ORACLE_HOME/ojdbc7.jar:$ORACLE_HOME/ojdbc6.jar:$ORACLE_HOME/ojdbc5.jar:$ORACLE_HOME/ojdbc14.jar:$ORACLE_HOME/classes12.jar"
 fi
 
 #

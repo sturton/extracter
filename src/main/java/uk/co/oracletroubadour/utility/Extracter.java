@@ -774,7 +774,7 @@ Extracter {
                                   hostName : (String)prop.get("HostName"));
 
                 // Sets the database name
-                ods.setDatabaseName((null != ServiceName && 
+                ods.setServiceName((null != ServiceName && 
                                      !ServiceName.equals("")) ? ServiceName : 
                                     (String)prop.get("ServiceName"));
 

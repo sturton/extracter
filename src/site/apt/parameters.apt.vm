@@ -1,0 +1,134 @@
+
+USAGE
+
+---
+Usage: java ... uk.co.oracletroubadour.utility.Extracter [ option , ... ] 
+
+Options:
+
+    A <array-size>       - array-fetchsize default "100"
+    v                    - verbose/debug on 
+
+(optional) input/output stream specification:
+    i <input-pattern>    - file name(s) to get SQL from "-"  means take statement from standard input 
+    o <output-pattern>   - file name(s) to output results to "-"  means take output to standard output 
+    e <error-pattern>    - file name(s) to output errors and warnings to "-"  means take output to standard error 
+    C <control-pattern>  - file name(s) to output meta-data information to "-"  means take output to standard error 
+    F <control-format>   - output format for meta-data information 
+
+(optional) output formatting:
+    D <date-format>      - dateFormat in Java SimpleDateFormat form default "yyyyMMddHHmmss"
+    s <separator>        - field separator default =TAB
+    d <delimiter>        - field separator default ='"'  
+    r <record-separator> - record separator default ='\r\n' (CRNL)
+
+(optional)  header and trailer:
+    b <header>       - before/header string 
+    a <trailer>      - after/trailer string 
+
+(optional) command-line specification of extract details:
+    c <column-list>       - list of columns/expressions to extract 
+    t <table-name>        - table/view/inline view to extract from 
+    w <where-clause>      - WHERE clause, GROUP BY , ORDER BY text  
+    f <function-name>     - PLSQL FUNCTION returning REF CURSOR
+
+(optional- overrides Connection.properties) connection details:
+    T <driver-type>      - JDBC driver type (thin|oci|oci8) etc. default Connection.properties 
+    H <host-name>        - JDBC host name (localhost) etc. default Connection.properties 
+    P <listener-port>    - JDBC listener port (1521) etc. default Connection.properties 
+    S <ServiceName>      - JDBC ServiceName Name/SID  (ORCL) etc. default Connection.properties 
+    U <user>             - JDBC user name (btdonline|testonline) etc. default Connection.properties 
+    X <password>         - user password (?) default Connection.properties 
+    u <JDBC-URL>         - URL:
+                              e.g. "jdbc:oracle:oci8:${username}/${password}@" (bequeath)
+                                   "jdbc:oracle:oci8:${username}/${password}@${host}" (OCI)
+                                   "jdbc:oracle:thin:${username}/${password}@${host}:${port}/${ServiceName}" (thin)
+                                   "jdbc:oracle:${drivertype}:${username}/${password}@${host}:${port}/${ServiceName}" (generic)
+---
+
+
+
+Options:
+
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+||Parameter||Switch Example  ||Description||
+||Name|| || ||
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|arraySize|A <array-size>      |array-fetchsize default "100"|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|verbose|v                     |verbose/debug mode on |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|help|h                     |Display Usage message |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|inputPath|   i <input-pattern>   |file name(s) to get SQL from "-"  means take statement from standard input |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|outputPath|   o <output-pattern>  |file name(s) to output results to "-"  means take output to standard output |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|errorPath|   e <error-pattern>   |file name(s) to output errors and warnings to "-"  means take output to standard error |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|controlFilePath|   C <control-pattern> |file name(s) to output meta-data information to "-"  means take output to standard error |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|controlFormat|   F <control-format>  |output format for meta-data information: Verbose, Loader (SQL*Loader), Data (detailed data), data (match output data format) |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|loaderMethod|   M <method> | SQL*Loader method: TRUNCATE,REPLACE,INSERT,APPEND|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|loaderFormat|   L <format> | SQL*Loader input file physical record format: FIXED,VARiable, STReam|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|dateFormat|   D <date-format>     |dateFormat in Java SimpleDateFormat form default "yyyyMMddHHmmss"|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|fieldSeparator|  s <separator>       |field separator default =TAB|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|fieldDelimiter|   d <delimiter>       |field separator default ='"'  |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|recordSeparator|   r <record-separator>|record separator default ='\r\n' (CRNL)|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|header|   b <header>      |before/header string |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|trailer|   a <trailer>     |after/trailer string |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|columnList|   c <column-list>      |list of columns/expressions to extract |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|tableName|   t <table-name>       |table/view/inline view to extract from |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|whereClause|   w <where-clause>     |WHERE clause, GROUP BY , ORDER BY text  |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|ResultSetSource|R <source>| SQL or PLSQL (see PLSQLFunctionName) |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|PLSQLFunctionName|   f <function-name>    |PLSQL FUNCTION returning REF CURSOR|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|driverType|   T <driver-type>     |JDBC driver type (thin|oci|oci8) etc. default Connection.properties |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|Host|   H <host-name>       |JDBC host name (localhost) etc. default Connection.properties |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|Port|   P <listener-port>   |JDBC listener port (1521) etc. default Connection.properties |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|ServiceName|   S <ServiceName>     |JDBC ServiceName Name/SID  (ORCL) etc. default Connection.properties |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|username|   U <user>            |JDBC user name (btdonline|testonline) etc. default Connection.properties |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|password|   X <password>        |user password (?) default Connection.properties |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|URL|   u <JDBC-URL>        | e.g. "jdbc:oracle:oci8:${username}/${password}@" (bequeath)|
+| | |                                 "jdbc:oracle:oci8:${username}/${password}@${host}" (OCI)|
+| | |                                 "jdbc:oracle:thin:${username}/${password}@${host}:${port}/${ServiceName}" (thin)|
+| | |                                 "jdbc:oracle:${drivertype}:${username}/${password}@${host}:${port}/${ServiceName}" (generic)|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|ZIPOutput|  z| ZIP-compress output  |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|oracleDateFormat| | Oracle DATE Format in Oracle TO_DATE/TO_CHAR format|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|oracleTimestampFormat| | Oracle TIMESTAMP format in Oracle TO_DATE/TO_CHAR format||
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|oracleTimestampTZFormat| | Oracle TIMESTAMP WITH TIMEZONE format in Oracle TO_TIMESTAMP/TO_CHAR format||
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|DateFormat| |Java Timestamp format (deprecated)|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|TimestampFormat| |Java Timestamp format (deprecated)|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|TimestampTZFormat| |Java Timestamp with Timezone format (deprecated)|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|TimeZone| |Required to convert Oracle TIMESTAMP WITH TIMEZONEs|
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+|ConfigurationFileName| |name of properties or resource |
+*---------------+--------------------------+----------------------------------------------------------------------------------+
+
