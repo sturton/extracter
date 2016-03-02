@@ -1,0 +1,64 @@
+   ---
+   Oracle Data Extracter
+   ---
+   Stuart Turton
+   ---
+   2015-08-05
+   --
+
+Introduction
+
+  Extracter is a Java port of an Oracle Pro*C program, that has the single purpose of writing out the results of a SELECT
+  statement out as text in various format.
+
+  The original Pro*C program was rewritten (several times) from an Oracle demonstration program (sample10.pc): the Java port
+  is the simplest possible port.
+
+  It <<is>> a monolithic convenience class, bundled with wrapper shell and Windows batch scripts cribbed from PLDoc. 
+  As such it is <<NOT>> a good Java design.
+
+Output Formats
+
+  The original code was intended to support reloading into Oracle and comparison between expected and actual results during testing: it therefore supports these formats:-
+
+  * {{{http://www.oracle.com/technetwork/testcontent/sql-loader-overview-095816.html}SQL*Loader}}
+
+  * CSV 
+
+  * FIXED
+
+  []
+
+Metadata Formats
+
+  As SQL*Loader requires an input file description, the application optionally generates the SQL*Loader control file: this may be repurposed as an {{{http://docs.oracle.com/cd/B28359_01/server.111/b28319/et_concepts.htm}External Table}} definition.
+  
+  Alternatively, the format may be specified as "data", in which case the metadata is output in the format specified for the output data: when the control file and output file are the same, this gives a header record containing the column names. 
+
+  If "DATA" is specified, all column metadata available from the Java {{{http://docs.oracle.com/javase/7/docs/api/java/sql/DatabaseMetaData.html}DatabaseMetaData}} API is displayed
+
+
+Input Sources
+
+  This application is a very thin wrapper around an Oracle ResultSet, so that anything that generates an {{{http://download.oracle.com/otn_hosted_doc/jdeveloper/905/jdbc-javadoc/oracle/jdbc/OracleResultSet.html}OracleResultSet}} could source the data: in reality, this application will accept an SQL query or a PL/SQL function returning a REF CURSOR.
+
+
+Command Line
+
+  The application is intended to be used in scripts, so everything is accessible via command-line parameters, specified in the typical Unix/Linux manner a typical usage is show below:-  
+
+
+---
+ sed -e "s/\{DATA_PACKAGE_ID\}/$\{DATA_PACKAGE_ID\}/" -e "s/\{DATE_FILTER\}/$\{DATE_FILTER\}/" $\{SQL_PATH\} | 
+ extract.sh -s ,  -d"\"" -r "\n"  -F data -A 10000 -i - -o $\{OUTPUT_PATH\} -C $\{OUTPUT_PATH\} -e $\{ERROR_PATH\} $\{DATABASE_PROPERTIES:+"--ConfigurationFileName=$DATABASE_PROPERTIES"\}
+---
+
+  For the full list of command-line options, please refer to {{{./parameters.html#Command_Line_Options} Command Line Options}}
+
+
+Security
+
+  There is very little security: it is assumed that you are working in a development environment, where passwords are not secret.
+
+  However, there is some security that you can impose: if you are unwilling to place passwords on the command-line, database connection details may be placed in a properties file which is specified by the {{{./parameters.html#ConfigurationFileName}ConfigurationFileName}} command-line option.
+

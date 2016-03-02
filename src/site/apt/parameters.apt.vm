@@ -48,87 +48,114 @@ Options:
 
 
 
-Options:
+{Command Line Options}
+
+  All options may be specified on the command-line using the GNU LongOpts syntax (<<<--option-name==option-value>>>); 
+  most options are available as standard Unix/Linux switches/flags ( <<<-switch option-value>>> - see Switch Example below),  
+
+  For example, the application input file may be specified either via the switch 
+
+---
+  -i <input-filename>
+---
+
+  or via the long options 
+
+---
+  --inputPath <input-filename>
+---
+
+
 
 *---------------+--------------------------+----------------------------------------------------------------------------------+
 ||Parameter||Switch Example  ||Description||
 ||Name|| || ||
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|arraySize|A <array-size>      |array-fetchsize default "100"|
+|{arraySize}|A <array-size>      |array-fetchsize default "100"|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|verbose|v                     |verbose/debug mode on |
+|{verbose}|v                     |verbose/debug mode on |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|help|h                     |Display Usage message |
+|{help}|h                     |Display Usage message |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|inputPath|   i <input-pattern>   |file name(s) to get SQL from "-"  means take statement from standard input |
+|{inputPath}|   i <input-pattern>   |file name(s) to get SQL from "-"  means take statement from standard input |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|outputPath|   o <output-pattern>  |file name(s) to output results to "-"  means take output to standard output |
+|{outputPath}|   o <output-pattern>  |file name(s) to output results to "-"  means take output to standard output |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|errorPath|   e <error-pattern>   |file name(s) to output errors and warnings to "-"  means take output to standard error |
+|{errorPath}|   e <error-pattern>   |file name(s) to output errors and warnings to "-"  means take output to standard error |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|controlFilePath|   C <control-pattern> |file name(s) to output meta-data information to "-"  means take output to standard error |
+|{controlFilePath}|   C <control-pattern> |file name(s) to output meta-data information to "-"  means take output to standard error |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|controlFormat|   F <control-format>  |output format for meta-data information: Verbose, Loader (SQL*Loader), Data (detailed data), data (match output data format) |
+|{controlFormat}|   F <control-format>  |output format for meta-data information: Verbose, Loader (SQL*Loader), Data (detailed data), data (match output data format) |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|loaderMethod|   M <method> | SQL*Loader method: TRUNCATE,REPLACE,INSERT,APPEND|
+|{loaderMethod}|   M <method> | SQL*Loader method: <<TRUNCATE>>,<<REPLACE>>,<<INSERT>>,<<APPEND>>|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|loaderFormat|   L <format> | SQL*Loader input file physical record format: FIXED,VARiable, STReam|
+|{loaderFormat}|   L <format> | SQL*Loader input file physical record format: <<FIX>>ed,<<VAR>>iable, <<STR>>eam|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|dateFormat|   D <date-format>     |dateFormat in Java SimpleDateFormat form default "yyyyMMddHHmmss"|
+|{dateFormat}|   D <date-format>     |dateFormat in Java SimpleDateFormat form default "yyyyMMddHHmmss"|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|fieldSeparator|  s <separator>       |field separator default =TAB|
+|{fieldSeparator}|  s <separator>       |field separator default = '\\t' (TAB)|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|fieldDelimiter|   d <delimiter>       |field separator default ='"'  |
+|{fieldDelimiter}|   d <delimiter>       |field separator default ='"'  |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|recordSeparator|   r <record-separator>|record separator default ='\r\n' (CRNL)|
+|{recordSeparator}|   r <record-separator>|record separator default ='\\r\\n' (CRNL)|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|header|   b <header>      |before/header string |
+|{header}|   b <header>      |before/header string |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|trailer|   a <trailer>     |after/trailer string |
+|{trailer}|   a <trailer>     |after/trailer string | If the trailer string contains the @rowCount placeholder, it is replaced by the number of extracted rows|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|columnList|   c <column-list>      |list of columns/expressions to extract |
+|{columnList}|   c <column-list>      |list of columns/expressions to extract |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|tableName|   t <table-name>       |table/view/inline view to extract from |
+|{tableName}|   t <table-name>       |table/view/inline view to extract from |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|whereClause|   w <where-clause>     |WHERE clause, GROUP BY , ORDER BY text  |
+|{whereClause}|   w <where-clause>     |WHERE clause, GROUP BY , ORDER BY text  |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|ResultSetSource|R <source>| SQL or PLSQL (see PLSQLFunctionName) |
+|{ResultSetSource}|R <source>| <<SQL>> or <<PLSQL>> default SQL if using the {{{PLSQLFunctionName}PLSQLFunctionName option}} also specify <<<-R PLSQL>>> )  |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|PLSQLFunctionName|   f <function-name>    |PLSQL FUNCTION returning REF CURSOR|
+|{PLSQLFunctionName}|   f <function-name>    |PLSQL FUNCTION returning REF CURSOR|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|driverType|   T <driver-type>     |JDBC driver type (thin|oci|oci8) etc. default Connection.properties |
+|{driverType}|   T <driver-type>     |JDBC driver type (<<thin>>/o<<ci>>/<<oci8>>) etc. default is defined in Connection.properties |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|Host|   H <host-name>       |JDBC host name (localhost) etc. default Connection.properties |
+|{Host}|   H <host-name>       |JDBC host name (localhost) etc. default is defined in Connection.properties |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|Port|   P <listener-port>   |JDBC listener port (1521) etc. default Connection.properties |
+|{Port}|   P <listener-port>   |JDBC listener port (1521) etc. default is defined in Connection.properties |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|ServiceName|   S <ServiceName>     |JDBC ServiceName Name/SID  (ORCL) etc. default Connection.properties |
+|{ServiceName}|   S <ServiceName>     |JDBC ServiceName Name/SID  (ORCL) etc. default is defined in Connection.properties |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|username|   U <user>            |JDBC user name (btdonline|testonline) etc. default Connection.properties |
+|{username}|   U <user>            |JDBC user name (scott) etc. default is defined in Connection.properties |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|password|   X <password>        |user password (?) default Connection.properties |
+|{password}|   X <password>        |user password (tiger) default Connection.properties |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|URL|   u <JDBC-URL>        | e.g. "jdbc:oracle:oci8:${username}/${password}@" (bequeath)|
-| | |                                 "jdbc:oracle:oci8:${username}/${password}@${host}" (OCI)|
-| | |                                 "jdbc:oracle:thin:${username}/${password}@${host}:${port}/${ServiceName}" (thin)|
-| | |                                 "jdbc:oracle:${drivertype}:${username}/${password}@${host}:${port}/${ServiceName}" (generic)|
+|{URL}|   u <JDBC-URL>        | e.g. "jdbc:oracle:oci8:$\{username\}/$\{password\}@" (bequeath)\ |
+| | |                                 "jdbc:oracle:oci8:$\{username\}/$\{password\}@$\{host\}" (OCI)\ |
+| | |                                 "jdbc:oracle:thin:$\{username\}/$\{password\}@$\{host\}:$\{port\}/$\{ServiceName\}" (thin)\ |
+| | |                                 "jdbc:oracle:$\{drivertype\}:$\{username\}/$\{password\}@$\{host\}:$\{port\}/$\{ServiceName\}" (generic)\ |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|ZIPOutput|  z| ZIP-compress output  |
+|{ZIPOutput}|  z| ZIP-compress output  |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|oracleDateFormat| | Oracle DATE Format in Oracle TO_DATE/TO_CHAR format|
+|{oracleDateFormat}| | Oracle {{{http://docs.oracle.com/cd/E18283_01/server.112/e10729/ch4datetime.htm#i1006006}DATE}} Format in Oracle {{{http://docs.oracle.com/cd/B28359_01/server.111/b28286/sql_elements004.htm#SQLRF30004}TO_DATE/TO_CHAR format}}|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|oracleTimestampFormat| | Oracle TIMESTAMP format in Oracle TO_DATE/TO_CHAR format||
+|{oracleTimestampFormat}| | Oracle {{{http://docs.oracle.com/cd/E18283_01/server.112/e10729/ch4datetime.htm#i1006050}TIMESTAMP}} format in Oracle {{{http://docs.oracle.com/cd/B28359_01/server.111/b28286/sql_elements004.htm#SQLRF30004}TO_DATE/TO_CHAR format}}||
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|oracleTimestampTZFormat| | Oracle TIMESTAMP WITH TIMEZONE format in Oracle TO_TIMESTAMP/TO_CHAR format||
+|{oracleTimestampTZFormat}| | Oracle {{{http://docs.oracle.com/cd/E18283_01/server.112/e10729/ch4datetime.htm#i1006081}TIMESTAMP WITH TIMEZONE}} format in Oracle {{{http://docs.oracle.com/cd/B28359_01/server.111/b28286/sql_elements004.htm#SQLRF30004}TO_TIMESTAMP/TO_CHAR format}}||
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|DateFormat| |Java Timestamp format (deprecated)|
+|{DateFormat}| |Java Timestamp format \ | 
+| | |                                 Uses {{{http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html}SimpleDateFormat}} \ |
+| | |                                 The equivalent of format string Oracle "YYYY-MM-DD" is "yyyy-MM-dd"|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|TimestampFormat| |Java Timestamp format (deprecated)|
+|{TimestampFormat}| |Java Timestamp format \ | 
+| | |                                 Uses {{{http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html}SimpleDateFormat}} plus a nano-second format character (<<<N>>>) \ |
+| | |                                 The equivalent of Oracle format string "YYYY-MM-DD HH24:MI:SS.FF9"  is "yyyy-MM-dd HH:mm:ss.NNNNNNNNN"|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|TimestampTZFormat| |Java Timestamp with Timezone format (deprecated)|
+|{TimestampTZFormat}| |Java Timestamp with Timezone format \ |
+| | |                                 Uses {{{http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html}SimpleDateFormat}} plus a nano-second format character (<<<N>>>) \ |
+| | |                                 The equivalent of Oracle format string "YYYY-MM-DD HH24:MI:SS..FF9 TZHTZM TZH:TZM TZD TZR" is "yyyy-MM-dd HH:mm:ss.NNNNNNNNN ZZZ XXX zzz zzzz" \ |
+| | |                                 \ |
+| | |                                 <<<zzzz>>> specifies the {{{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}Time Zone}} Display Name, rather than the ID which is generated by TZR \ |
+| | |                                 \ |
+| | |                                 This currently (Java 7) makes round-tripping possible only if these time zone format combinations are used:- \{<<<ZZZ TZHTZM>>>\} and \{<<<XXX TZH:TZM>>>\} |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|TimeZone| |Required to convert Oracle TIMESTAMP WITH TIMEZONEs|
+|{TimeZone}| |Required to convert Oracle TIMESTAMP WITH TIMEZONEs|
 *---------------+--------------------------+----------------------------------------------------------------------------------+
-|ConfigurationFileName| |name of properties or resource |
+|{ConfigurationFileName}| |name of properties or resource |
 *---------------+--------------------------+----------------------------------------------------------------------------------+
 
