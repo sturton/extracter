@@ -181,6 +181,16 @@ Extracter {
     String password;
 
     /**
+     * Proxy Account
+     */
+    String proxyUserName;
+
+    /**
+     * Proxy Password
+     */
+    String proxyPassword;
+
+    /**
      * JDBC URL - generated from parameters or passed in as a string
      */
     String connectionURL;
@@ -362,8 +372,9 @@ Extracter {
                            "\n    H <host-name>        - JDBC host name (localhost) etc. default Connection.properties " + 
                            "\n    P <listener-port>    - JDBC listener port (1521) etc. default Connection.properties " + 
                            "\n    S <ServiceName>      - JDBC ServiceName Name/SID  (ORCL) etc. default Connection.properties " + 
-                           "\n    U <user>             - JDBC user name (btdonline|testonline) etc. default Connection.properties " + 
-                           "\n    X <password>         - user password (?) default Connection.properties " + 
+                           "\n    U <user>             - JDBC user name (scott) or (mid_tier_user[proxy_user]) etc. default Connection.properties " + 
+                           "\n    X <password>         - user password (tiger) default Connection.properties " + 
+                           "\n    x <proxyPassword>    - proxy user password (tiger) default Connection.properties " + 
                            "\n    u <JDBC-URL>         - URL:" + 
                            "\n                              e.g. \"jdbc:oracle:oci8:${username}/${password}@\" (bequeath)" + 
                            "\n                                   \"jdbc:oracle:oci8:${username}/${password}@${host}\" (OCI)" + 
@@ -379,11 +390,11 @@ Extracter {
      *	  and sets up the database connection.
      */
     public static void main(String[] args) {
-        Extracter Extracter = new Extracter();
+        Extracter extracter = new Extracter();
 
         try {
 
-            LongOpt[] longopts = new LongOpt[38];
+            LongOpt[] longopts = new LongOpt[39];
             longopts[0] = new LongOpt("username", LongOpt.REQUIRED_ARGUMENT, null, 'U'); 
             longopts[1] = new LongOpt("password", LongOpt.REQUIRED_ARGUMENT, null, 'X'); 
             longopts[2] = new LongOpt("SID", LongOpt.REQUIRED_ARGUMENT, null, 'S'); 
@@ -423,6 +434,7 @@ Extracter {
             longopts[35] = new LongOpt("ResultSetSource", LongOpt.REQUIRED_ARGUMENT, null, 'R'); 
             longopts[36] = new LongOpt("PLSQLFunctionName", LongOpt.REQUIRED_ARGUMENT, null, 'f'); 
             longopts[37] = new LongOpt("ConfigurationFileName", LongOpt.REQUIRED_ARGUMENT, null, 37); 
+            longopts[38] = new LongOpt("proxyPassword", LongOpt.REQUIRED_ARGUMENT, null, 'x'); 
 
 /*
  
@@ -455,30 +467,30 @@ Extracter {
                 switch (c) {
 
                     case 28:
-                        Extracter.setOracleDateFormat(getopt.getOptarg());
+                        extracter.setOracleDateFormat(getopt.getOptarg());
                         break;
                     case 29:
-                        Extracter.setOracleTimestampFormat(getopt.getOptarg());
+                        extracter.setOracleTimestampFormat(getopt.getOptarg());
                         break;
                     case 30:
-                        Extracter.setOracleTimestampTZFormat(getopt.getOptarg());
+                        extracter.setOracleTimestampTZFormat(getopt.getOptarg());
                         break;
                     case 31:
-                        Extracter.setDateFormat(getopt.getOptarg());
+                        extracter.setDateFormat(getopt.getOptarg());
                         break;
                     case 32:
-                        Extracter.setTimestampFormat(getopt.getOptarg());
+                        extracter.setTimestampFormat(getopt.getOptarg());
                         break;
                     case 33:
-                        Extracter.setTimestampTZFormat(getopt.getOptarg());
+                        extracter.setTimestampTZFormat(getopt.getOptarg());
                         break;
 
                     case 34:
-                        Extracter.setTimeZone(TimeZone.getTimeZone(getopt.getOptarg()));
+                        extracter.setTimeZone(TimeZone.getTimeZone(getopt.getOptarg()));
                         break;
 
                     case 37:
-                        Extracter.setConfigurationFileName(getopt.getOptarg());
+                        extracter.setConfigurationFileName(getopt.getOptarg());
                         break;
 
                  
@@ -489,114 +501,130 @@ Extracter {
                    break;
                        //
                 case 'T':
-                    Extracter.setDriverType(getopt.getOptarg());
+                    extracter.setDriverType(getopt.getOptarg());
                     break;
 
                 case 'H':
-                    Extracter.setHostName(getopt.getOptarg());
+                    extracter.setHostName(getopt.getOptarg());
                     break;
 
                 case 'P':
-                    Extracter.setPortName(getopt.getOptarg());
+                    extracter.setPortName(getopt.getOptarg());
                     break;
 
                 case 'S':
-                    Extracter.setServiceName(getopt.getOptarg());
+                    extracter.setServiceName(getopt.getOptarg());
                     break;
 
                 case 'U':
-                    Extracter.setUserName(getopt.getOptarg());
+        		    final String paramUserName = getopt.getOptarg();
+        		    //Check for proxy user name username[proxyUsername] 
+        		    int bracketOpen = paramUserName.indexOf('[') ;
+        		    int bracketClose = paramUserName.lastIndexOf(']') ;
+        		    if (bracketOpen >= 0 &&  bracketClose > bracketOpen  )
+        	            {
+        			extracter.setUserName(paramUserName.substring(0,bracketOpen) );
+        			extracter.setProxyUserName(paramUserName.substring(bracketOpen+1, bracketClose-1) );
+        		    }
+        		    else
+                            {
+        			extracter.setUserName(paramUserName);
+        		    }
                     break;
 
                 case 'X':
-                    Extracter.setPassword(getopt.getOptarg());
+                    extracter.setPassword(getopt.getOptarg());
+                    break;
+
+                case 'x':
+                    extracter.setProxyPassword(getopt.getOptarg());
                     break;
 
                 case 'D':
-                    Extracter.setDateFormat(getopt.getOptarg());
+                    extracter.setDateFormat(getopt.getOptarg());
                     break;
 
                 case 'A':
-                    Extracter.setPrefetchValue(Integer.parseInt(getopt.getOptarg()));
+                    extracter.setPrefetchValue(Integer.parseInt(getopt.getOptarg()));
                     break;
 
                 case 'v':
-                    Extracter.setDebug(true);
+                    extracter.setDebug(true);
                     break;
 
                 case 'i':
-                    Extracter.setInput(getopt.getOptarg());
+                    extracter.setInput(getopt.getOptarg());
                     break;
 
                 case 'o':
-                    Extracter.setOutput(getopt.getOptarg());
+                    extracter.setOutput(getopt.getOptarg());
                     break;
 
                 case 'C':
-                        Extracter.setControl(getopt.getOptarg());
+                        extracter.setControl(getopt.getOptarg());
                         break;
 
                 case 'F':
-                        Extracter.setControlFormat(getopt.getOptarg());
+                        extracter.setControlFormat(getopt.getOptarg());
                         break;
 
                 case 'M':
-                        Extracter.setLoaderMethod(getopt.getOptarg());
+                        extracter.setLoaderMethod(getopt.getOptarg());
                         break;
 
                 case 'L':
-                        Extracter.setLoaderRecordFormat(getopt.getOptarg());
+                        extracter.setLoaderRecordFormat(getopt.getOptarg());
                         break;
 
                 case 'e':
-                    Extracter.setError(getopt.getOptarg());
+                    extracter.setError(getopt.getOptarg());
                     break;
 
                 case 's':
-                    Extracter.setSeparator(unescape(getopt.getOptarg()));
+                    extracter.setSeparator(unescape(getopt.getOptarg()));
                     break;
                 case 'd':
-                    Extracter.setDelimiter(unescape(getopt.getOptarg()));
+                    extracter.setDelimiter(unescape(getopt.getOptarg()));
                     break;
 
                 case 'r':
-                    Extracter.setRecordSeparator(unescape(getopt.getOptarg()));
+                    extracter.setRecordSeparator(unescape(getopt.getOptarg()));
                     break;
 
                 case 'c':
-                    Extracter.setColumnNames(getopt.getOptarg());
+                    extracter.setColumnNames(getopt.getOptarg());
                     break;
 
                 case 't':
-                    Extracter.setTableName(getopt.getOptarg());
+                    extracter.setTableName(getopt.getOptarg());
                     break;
 
                 case 'w':
-                    Extracter.setWhereClause(getopt.getOptarg());
+                    extracter.setWhereClause(getopt.getOptarg());
                     break;
 
                 case 'u':
-                    Extracter.setConnectionURL(getopt.getOptarg());
+                    extracter.setConnectionURL(getopt.getOptarg());
                     break;
 
                 case 'b':
-                    Extracter.setHeader(getopt.getOptarg());
+                    extracter.setHeader(getopt.getOptarg());
                     break;
 
                 case 'a':
-                    Extracter.setTrailer(getopt.getOptarg());
+                    extracter.setTrailer(getopt.getOptarg());
                     break;
 
                 case 'z':
-                    Extracter.setZipOutput(true);
+                    extracter.setZipOutput(true);
                     break;
 
                 case 'R':
-                    Extracter.setRecordSetSource(getopt.getOptarg());
+                    extracter.setRecordSetSource(getopt.getOptarg());
                     break;
 
                 case 'f':
-                    Extracter.setFunctionName(getopt.getOptarg());
+                    extracter.setFunctionName(getopt.getOptarg());
                     break;
 
                 case 'W':
@@ -626,31 +654,31 @@ Extracter {
         //Passed validation - Perform the extract
         try {
             try {
-                if (Extracter.error.equals("-")) {
-                    Extracter.setErrorStream(System.err);
+                if (extracter.error.equals("-")) {
+                    extracter.setErrorStream(System.err);
                 } else {
-                    Extracter.setErrorStream(new PrintStream(new FileOutputStream(Extracter.error)));
+                    extracter.setErrorStream(new PrintStream(new FileOutputStream(extracter.error)));
                 }
             } catch (IOException io) {
                 System.err.println("Failed to open error output \"" + 
-                                   Extracter.error + 
+                                   extracter.error + 
                                    "\" (defaulting to standard error): " + 
                                    io.getMessage());
-                Extracter.setErrorStream(System.err);
+                extracter.setErrorStream(System.err);
             }
-            Extracter.dbConnection(); // Make JDBC Connection
+            extracter.dbConnection(); // Make JDBC Connection
 
-            if (Extracter.connection != null) {
-                Extracter.selectRecords();
-                Extracter.exitApplication();
+            if (extracter.connection != null) {
+                extracter.selectRecords();
+                extracter.exitApplication();
             }
         } catch (Exception e) {
 
-            ((null == Extracter.errorStream) ? System.err : 
-             Extracter.errorStream).println("Execution problem:" + 
+            ((null == extracter.errorStream) ? System.err : 
+             extracter.errorStream).println("Execution problem:" + 
                                            e.getMessage() + "\nStack Trace:");
-            e.printStackTrace((null == Extracter.errorStream) ? System.err : 
-                              Extracter.errorStream);
+            e.printStackTrace((null == extracter.errorStream) ? System.err : 
+                              extracter.errorStream);
             System.exit(1);
         }
 
@@ -805,6 +833,25 @@ Extracter {
                                    ods.getTNSEntryName() + "/" + 
                                    ods.getDatabaseName() + "/" + ods.getURL() + 
                                    ") Database as " + ods.getUser());
+
+
+	    if ( null != proxyUserName && !"".equals(proxyUserName) )
+	    {
+	      java.util.Properties proxyUserProperties = new java.util.Properties();
+	      proxyUserProperties.setProperty(OracleConnection.PROXY_USER_NAME, proxyUserName);
+
+	      if ( null != proxyPassword && !"".equals(proxyPassword) )
+	      {
+		proxyUserProperties.setProperty(OracleConnection.PROXY_USER_PASSWORD, proxyPassword);
+	      }
+
+	      OracleConnection oracleConnection = (OracleConnection) connection ;
+	      oracleConnection.openProxySession( 
+			      OracleConnection.PROXYTYPE_USER_NAME
+			      , proxyUserProperties
+			      );
+	    }
+
 
 
         } catch (SQLException ex) { // Trap SQL errors
@@ -1815,6 +1862,22 @@ Extracter {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setProxyUserName(String userName) {
+        this.proxyUserName = proxyUserName;
+    }
+
+    public String getProxyUserName() {
+        return proxyUserName;
+    }
+
+    public void setProxyPassword(String Proxypassword) {
+        this.proxyPassword = proxyPassword;
+    }
+
+    public String getProxyPassword() {
+        return proxyPassword;
     }
 
     public void setConnectionURL(String connectionURL) {

@@ -37,8 +37,9 @@ Options:
     H <host-name>        - JDBC host name (localhost) etc. default Connection.properties 
     P <listener-port>    - JDBC listener port (1521) etc. default Connection.properties 
     S <ServiceName>      - JDBC ServiceName Name/SID  (ORCL) etc. default Connection.properties 
-    U <user>             - JDBC user name (btdonline|testonline) etc. default Connection.properties 
-    X <password>         - user password (?) default Connection.properties 
+    U <user>             - JDBC user name (scott) or mid_tier_user[scott] etc. default Connection.properties 
+    X <password>         - user password (tiger) default Connection.properties 
+    x <proxyPassword>    - optional proxy user password (tiger) default Connection.properties 
     u <JDBC-URL>         - URL:
                               e.g. "jdbc:oracle:oci8:${username}/${password}@" (bequeath)
                                    "jdbc:oracle:oci8:${username}/${password}@${host}" (OCI)
